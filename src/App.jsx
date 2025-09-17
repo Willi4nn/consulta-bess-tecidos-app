@@ -10,7 +10,7 @@ import useExcelData from './hooks/useExcelData';
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFabric, setSelectedFabric] = useState(null);
-  const { fabrics: allFabrics, loading, error } = useExcelData('/fabrics.xlsx');
+  const { fabrics: allFabrics, loading, error } = useExcelData('/fabrics.xls');
   const [localFabrics, setLocalFabrics] = useState([]);
   const [localError, setLocalError] = useState(null);
 
@@ -101,7 +101,9 @@ function App() {
           }}
         >
           <Trash2 size={20} color="#d32f2f" />
-          <span style={{ color: '#d32f2f', fontWeight: 500, fontSize: '0.95em' }}>Limpar cache</span>
+          {window.innerWidth > 480 && (
+            <span style={{ color: '#d32f2f', fontWeight: 500, fontSize: '0.95em' }}>Limpar cache</span>
+          )}
         </button>
       )}
       <header className="header">
