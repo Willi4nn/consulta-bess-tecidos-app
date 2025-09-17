@@ -16,11 +16,14 @@ const DetailItem = ({ label, value }) => {
   );
 };
 
+import { ArrowLeftCircle } from 'lucide-react';
+
 const FabricDetail = ({ fabric, onBack }) => {
   return (
     <div className="fabric-detail">
-      <button id="backBtn" className="back-btn" onClick={onBack}>
-        ⬅️ Voltar para a lista
+      <button id="backBtn" className="back-btn" onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <ArrowLeftCircle size={22} strokeWidth={2} style={{ marginRight: 4 }} />
+        Voltar para a lista
       </button>
 
       <h2>{fabric.Descrição || 'N/D'}</h2>

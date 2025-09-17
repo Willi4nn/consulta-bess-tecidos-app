@@ -1,5 +1,3 @@
-
-// A small utility to format currency
 const formatPrice = (price) => {
   if (price === null || isNaN(price)) return 'N/D';
   return Number(price).toLocaleString('pt-BR', {

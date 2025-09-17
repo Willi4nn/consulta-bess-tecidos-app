@@ -1,5 +1,3 @@
-// src/App.jsx
-
 import { useMemo, useState } from 'react';
 import './App.css';
 import FabricDetail from './components/FabricDetail';
@@ -26,7 +24,7 @@ function App() {
     return allFabrics.filter(item => {
       // Normaliza o código do item da mesma forma que a busca.
       const itemCode = String(item['Código'] || '').toLowerCase().replace(/[\s-]+/g, '');
-      
+
       // Converte a descrição do item para minúsculas.
       const itemDesc = String(item['Descrição'] || '').toLowerCase();
 
@@ -57,10 +55,12 @@ function App() {
       ) : error ? (
         <div className="error">Erro ao carregar Excel: {error}</div>
       ) : allFabrics.length === 0 ? (
-        <div className="not-found">Nenhum dado encontrado no Excel.<br/>Verifique se o arquivo está acessível e se o parser está correto.</div>
+        <div className="not-found">Nenhum dado encontrado no Excel.<br />Verifique se o arquivo está acessível e se o parser está correto.</div>
       ) : (
         <>
-          <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
+          {!selectedFabric && (
+            <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
+          )}
           <main className="results-area">
             {selectedFabric ? (
               <FabricDetail fabric={selectedFabric} onBack={handleBackToList} />

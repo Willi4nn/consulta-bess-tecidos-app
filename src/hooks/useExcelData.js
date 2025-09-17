@@ -30,15 +30,10 @@ export default function useExcelData(excelUrl) {
         const response = await fetch(excelUrl);
         const arrayBuffer = await response.arrayBuffer();
         const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        
-        // Em vez de pegar a primeira aba, especifique o nome da aba "Tabela".
-        const sheetName = 'Tabela'; 
-        const sheet = workbook.Sheets[sheetName];
 
-        if (!sheet) {
-          throw new Error('A aba "Tabela" não foi encontrada no arquivo Excel.');
-        }
-        
+        // Pega a aba "Tabela" do arquivo
+        const sheetName = workbook.SheetNames[1];
+        const sheet = workbook.Sheets[sheetName];
         const sheetData = XLSX.utils.sheet_to_json(sheet);
         const parsedFabrics = parseExcelToFabrics(sheetData);
         if (isMounted) setFabrics(parsedFabrics);
