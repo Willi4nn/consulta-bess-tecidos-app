@@ -11,7 +11,6 @@ const SearchBar = ({ query, onQueryChange }) => {
             left: 15,
             top: '50%',
             transform: 'translateY(-50%)',
-            pointerEvents: 'none',
             opacity: 0.5
           }}
         >
@@ -28,6 +27,7 @@ const SearchBar = ({ query, onQueryChange }) => {
           autoCorrect="off"
           autoCapitalize="none"
           enterKeyHint="search"
+          tabIndex={0}
         />
         {query && (
           <button
