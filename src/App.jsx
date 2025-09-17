@@ -1,5 +1,5 @@
-import { AlertCircle } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { AlertCircle, Trash2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
 import './App.css';
 import FabricDetail from './components/FabricDetail';
@@ -13,6 +13,19 @@ function App() {
   const { fabrics: allFabrics, loading, error } = useExcelData('/fabrics.xlsx');
   const [localFabrics, setLocalFabrics] = useState([]);
   const [localError, setLocalError] = useState(null);
+
+  // Carrega do localStorage ao iniciar
+  useEffect(() => {
+    const saved = localStorage.getItem('bessFabrics');
+    if (saved) {
+      try {
+        const arr = JSON.parse(saved);
+        if (Array.isArray(arr) && arr.length > 0) setLocalFabrics(arr);
+      } catch (err) {
+        console.error('Erro ao ler dados do localStorage:', err);
+      }
+    }
+  }, []);
 
   const fabricsToUse = localFabrics.length > 0 ? localFabrics : allFabrics;
   const filteredFabrics = useMemo(() => {
@@ -29,7 +42,7 @@ function App() {
   const handleSelectFabric = (fabric) => setSelectedFabric(fabric);
   const handleBackToList = () => setSelectedFabric(null);
 
-  // Função para processar upload do Excel
+  // Função para processar upload do Excel e salvar no localStorage
   const handleExcelUpload = async (e) => {
     setLocalError(null);
     const file = e.target.files[0];
@@ -53,13 +66,44 @@ function App() {
         "Acabamento": row["Acabamento"] || '',
       }));
       setLocalFabrics(parsedFabrics);
+      localStorage.setItem('bessFabrics', JSON.stringify(parsedFabrics));
     } catch (err) {
       setLocalError('Erro ao processar Excel: ' + (err.message || 'Formato inválido'));
     }
   };
 
+  const handleClearCache = () => {
+    localStorage.removeItem('bessFabrics');
+    setLocalFabrics([]);
+  };
+
   return (
-    <div className="container">
+    <div className="container" style={{ position: 'relative' }}>
+      {/* Botão de limpar cache */}
+      {localFabrics.length > 0 && (
+        <button
+          title="Apagar cache do Excel"
+          onClick={handleClearCache}
+          style={{
+            position: 'absolute',
+            top: 18,
+            right: 18,
+            background: '#fff',
+            border: '1px solid var(--border-color)',
+            borderRadius: 8,
+            padding: '7px 10px',
+            boxShadow: '0 2px 8px var(--shadow-color)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            zIndex: 10
+          }}
+        >
+          <Trash2 size={20} color="#d32f2f" />
+          <span style={{ color: '#d32f2f', fontWeight: 500, fontSize: '0.95em' }}>Limpar cache</span>
+        </button>
+      )}
       <header className="header">
         <h1>Bess Tecidos</h1>
         <p>Tabela de Preços Digital</p>
