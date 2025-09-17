@@ -2,30 +2,58 @@ import { Search, XCircle } from 'lucide-react';
 
 const SearchBar = ({ query, onQueryChange }) => {
   return (
-    <div className="search-wrapper">
-      <span className="search-icon">
-        <Search size={20} strokeWidth={2} />
-      </span>
-      <input
-        type="text"
-        id="searchInput"
-        className="search-input"
-        placeholder="Buscar por código ou descrição..."
-        value={query}
-        onChange={(e) => onQueryChange(e.target.value)}
-      />
-      {query && (
-        <button
-          id="clearSearchBtn"
-          className="clear-search-btn"
-          title="Limpar busca"
-          onClick={() => onQueryChange('')}
-          style={{ display: 'flex', alignItems: 'center', background: 'none', border: 'none', padding: 0 }}
+    <form className="search-wrapper" role="search" autoComplete="off" onSubmit={e => e.preventDefault()}>
+      <div style={{ position: 'relative', width: '100%' }}>
+        <span
+          className="search-icon"
+          style={{
+            position: 'absolute',
+            left: 15,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            pointerEvents: 'none',
+            opacity: 0.5
+          }}
         >
-          <XCircle size={22} strokeWidth={2} color="#888" />
-        </button>
-      )}
-    </div>
+          <Search size={20} strokeWidth={2} />
+        </span>
+        <input
+          type="search"
+          id="searchInput"
+          className="search-input"
+          placeholder="Buscar por código ou descrição..."
+          value={query}
+          onChange={e => onQueryChange(e.target.value)}
+          style={{ paddingLeft: 40 }}
+          autoCorrect="off"
+          autoCapitalize="none"
+          enterKeyHint="search"
+        />
+        {query && (
+          <button
+            id="clearSearchBtn"
+            className="clear-search-btn"
+            title="Limpar busca"
+            type="button"
+            onClick={() => onQueryChange('')}
+            style={{
+              position: 'absolute',
+              right: 15,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer'
+            }}
+          >
+            <XCircle size={22} strokeWidth={2} color="#888" />
+          </button>
+        )}
+      </div>
+    </form>
   );
 };
 
