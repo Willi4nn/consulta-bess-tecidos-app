@@ -1,5 +1,6 @@
+/* === Variáveis Globais === */
 :root {
-  --primary-color: #007BFF;
+  --primary-color: #007bff;
   --light-gray: #f4f4f9;
   --dark-gray: #6c757d;
   --border-color: #e0e0e0;
@@ -7,22 +8,31 @@
   --green-price: #28a745;
   --shadow-color: rgba(0, 0, 0, 0.08);
   --hover-bg: #f0f8ff;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
 }
 
-* {
+/* === Reset Básico === */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
 }
 
+html,
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
   background-color: var(--light-gray);
-  padding: 1rem;
+  padding: var(--space-md);
   font-size: 16px;
   color: #333;
 }
@@ -31,12 +41,13 @@ body {
   height: 100%;
 }
 
+/* === Container Principal === */
 .container {
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
   background: var(--card-bg);
-  padding: 1.5rem;
+  padding: var(--space-lg);
   border-radius: 12px;
   box-shadow: 0 4px 20px var(--shadow-color);
   display: flex;
@@ -44,30 +55,30 @@ body {
   height: 100%;
 }
 
-/* Header */
+/* === Header === */
 .header h1 {
-  margin: 0 0 5px 0;
+  margin-bottom: var(--space-xs);
   text-align: center;
   font-size: 1.8em;
   color: #333;
 }
 
 .header p {
-  margin: 0 0 1.5rem;
+  margin-bottom: var(--space-lg);
   text-align: center;
   color: var(--dark-gray);
   font-size: 1.1em;
 }
 
-/* Search Bar */
+/* === Search Bar === */
 .search-wrapper {
   position: relative;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg);
 }
 
 .search-input {
   width: 100%;
-  padding: 15px 45px;
+  padding: var(--space-md) 45px;
   font-size: 1.1em;
   border: 2px solid var(--border-color);
   border-radius: 8px;
@@ -91,7 +102,6 @@ body {
 }
 
 .search-icon {
-  content: '🔎';
   position: absolute;
   left: 15px;
   top: 50%;
@@ -100,13 +110,13 @@ body {
   opacity: 0.5;
 }
 
-/* Results Area */
+/* === Área de Resultados === */
 .results-area {
   flex: 1;
   overflow-y: auto;
 }
 
-/* Fabric List - Table Layout for Desktop */
+/* === Fabric List === */
 .fabric-list {
   display: table;
   width: 100%;
@@ -121,7 +131,7 @@ body {
 
 .fabric-list-header div {
   display: table-cell;
-  padding: 12px 15px;
+  padding: var(--space-md) 15px;
   border-bottom: 2px solid var(--border-color);
   text-align: left;
 }
@@ -138,7 +148,7 @@ body {
 
 .fabric-list-item > div {
   display: table-cell;
-  padding: 12px 15px;
+  padding: var(--space-md) 15px;
   vertical-align: middle;
   border-bottom: 1px solid var(--border-color);
 }
@@ -155,8 +165,7 @@ body {
   color: var(--green-price);
 }
 
-/* Fabric Detail View */
-
+/* === Fabric Detail View === */
 .fabric-detail {
   animation: fadeIn 0.3s;
   display: flex;
@@ -169,7 +178,7 @@ body {
   top: 0;
   z-index: 2;
   background: var(--card-bg);
-  padding-bottom: 1rem;
+  padding-bottom: var(--space-md);
 }
 
 .detail-content {
@@ -179,62 +188,78 @@ body {
 }
 
 .back-btn {
-  background: var(--light-gray);
+  background: var(--primary-color);
   border: 1px solid var(--border-color);
-  padding: 10px 15px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: 8px;
   font-size: 1em;
   cursor: pointer;
-  width: fit-content;
+  width: 100%;
   text-align: left;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
   transition: background-color 0.2s;
 }
 .back-btn:hover {
-  background-color: var(--border-color);
+  background-color: #0056b3;
+}
+.back-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .fabric-detail h2 {
-    margin-top: 0;
+  margin-top: 0;
+  margin-bottom: var(--space-xs);
 }
 .fabric-detail .code {
-    color: var(--dark-gray);
-    margin-bottom: 1rem;
+  color: var(--dark-gray);
+  margin-bottom: var(--space-md);
 }
 .fabric-detail .price {
   font-size: 2.2em;
   font-weight: 700;
   color: var(--green-price);
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 .fabric-detail .price-unit {
-    font-size: 0.5em;
-    font-weight: 400;
-    color: var(--dark-gray);
+  font-size: 0.5em;
+  font-weight: 400;
+  color: var(--dark-gray);
 }
 .details-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: var(--space-md);
 }
 
 .detail-item {
   background-color: var(--light-gray);
-  padding: 12px;
+  padding: var(--space-md);
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .detail-item strong {
-  display: block;
   color: #555;
-  margin-bottom: 5px;
+  margin-bottom: 0;
   font-size: 0.8em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 .detail-item span {
-    font-size: 1.05em;
+  font-size: 1.05em;
 }
 
+/* === Mensagem de Não Encontrado === */
 .not-found {
   text-align: center;
   padding: 50px 20px;
@@ -243,15 +268,24 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Mobile Responsiveness */
+/* === Responsividade === */
 @media (max-width: 768px) {
+  .container {
+    padding: var(--space-sm);
+  }
   .fabric-list {
     display: grid;
-    gap: 10px;
+    gap: var(--space-sm);
   }
   .fabric-list-header {
     display: none;
@@ -261,16 +295,43 @@ body {
     display: block;
   }
   .fabric-list-item {
-     border: 1px solid var(--border-color);
-     border-left: 5px solid var(--primary-color);
-     padding: 15px;
-     border-radius: 8px;
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--primary-color);
+    padding: var(--space-md);
+    border-radius: 8px;
   }
-   .fabric-list-item > div {
-     padding: 4px 0;
-     border: none;
-   }
-   .fabric-desc {
-     font-size: 1.1em;
-   }
+  .fabric-list-item > div {
+    padding: var(--space-xs) 0;
+    border: none;
+  }
+  .fabric-desc {
+    font-size: 1.1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-xs);
+  }
+  .fabric-detail .price {
+    font-size: 1.4em;
+  }
+}
+
+/* === Utilitários === */
+.u-flex {
+  display: flex;
+  align-items: center;
+}
+.u-gap-sm {
+  gap: var(--space-sm);
+}
+.u-gap-md {
+  gap: var(--space-md);
+}
+.u-mb-sm {
+  margin-bottom: var(--space-sm);
+}
+.u-mb-md {
+  margin-bottom: var(--space-md);
 }

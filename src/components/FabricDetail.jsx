@@ -62,7 +62,7 @@ const FabricDetail = ({ fabric, onBack }) => {
         }}
       >
         <h2 style={{ marginBottom: 8 }}>{fabric.Descrição || 'N/D'}</h2>
-        <p className="code" style={{ marginBottom: 16 }}>Código: {fabric.Código}</p>
+        <p className="code" style={{ marginBottom: 16, fontWeight: 'bold', fontSize: '1.1rem' }}>Código: {fabric.Código}</p>
 
         <p className="price" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
           <BadgeDollarSign size={28} strokeWidth={2} color="#28a745" style={{ marginRight: 4 }} />
