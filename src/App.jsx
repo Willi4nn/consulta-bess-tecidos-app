@@ -10,7 +10,7 @@ import useExcelData from './hooks/useExcelData';
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFabric, setSelectedFabric] = useState(null);
-  const { fabrics: allFabrics, loading, error } = useExcelData('/fabrics.xls');
+  const { fabrics: allFabrics, loading, error } = useExcelData('/fabrics.xlsx');
   const [localFabrics, setLocalFabrics] = useState([]);
   const [localError, setLocalError] = useState(null);
 
