@@ -335,3 +335,40 @@ body {
 .u-mb-md {
   margin-bottom: var(--space-md);
 }
+
+/* === Clear Cache Button === */
+.clear-cache-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+.clear-cache-btn:hover {
+  background: #fafafa;
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+.clear-cache-btn:active {
+  transform: translateY(1px);
+}
+.clear-cache-label {
+  color: #d32f2f;
+  font-weight: 500;
+  font-size: 0.95em;
+}
+
+@media (max-width: 520px) {
+  .clear-cache-label {
+    display: none;
+  }
+  .clear-cache-btn {
+    padding: 8px;
+  }
+}

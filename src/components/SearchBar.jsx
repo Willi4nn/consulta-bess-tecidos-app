@@ -17,7 +17,7 @@ const SearchBar = ({ query, onQueryChange }) => {
           <Search size={20} strokeWidth={2} />
         </span>
         <input
-          type="search"
+          type="text"
           id="searchInput"
           className="search-input"
           placeholder="Buscar por código ou descrição..."
@@ -26,8 +26,6 @@ const SearchBar = ({ query, onQueryChange }) => {
           style={{ paddingLeft: 40 }}
           autoCorrect="off"
           autoCapitalize="none"
-          enterKeyHint="search"
-          tabIndex={0}
         />
         {query && (
           <button

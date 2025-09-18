@@ -5,7 +5,7 @@ import './App.css';
 import FabricDetail from './components/FabricDetail';
 import FabricList from './components/FabricList';
 import SearchBar from './components/SearchBar';
-import useExcelData from './hooks/useExcelData';
+import useExcelData, { parseExcelToFabrics } from './hooks/useExcelData';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,18 +53,7 @@ function App() {
       const sheetName = workbook.SheetNames[1] || workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const sheetData = XLSX.utils.sheet_to_json(sheet);
-      const parsedFabrics = sheetData.map(row => ({
-        "Código": row["Código"] || '',
-        "Origem": row["Orig."] || '',
-        "Descrição": row["Descrição"] || '',
-        "Preço": parseFloat(row["R$"] || 0),
-        "Largura": row["Larg."] || '',
-        "Unidade": row["Und."] || '',
-        "Gramatura": parseInt(row["G/ml"] || 0),
-        "NCM": row["NCM"] || '',
-        "Catálogo": row["Catálogo"] || '',
-        "Acabamento": row["Acabamento"] || '',
-      }));
+      const parsedFabrics = parseExcelToFabrics(sheetData);
       setLocalFabrics(parsedFabrics);
       localStorage.setItem('bessFabrics', JSON.stringify(parsedFabrics));
     } catch (err) {
@@ -81,29 +70,9 @@ function App() {
     <div className="container" style={{ position: 'relative' }}>
       {/* Botão de limpar cache */}
       {localFabrics.length > 0 && (
-        <button
-          title="Apagar cache do Excel"
-          onClick={handleClearCache}
-          style={{
-            position: 'absolute',
-            top: 18,
-            right: 18,
-            background: '#fff',
-            border: '1px solid var(--border-color)',
-            borderRadius: 8,
-            padding: '7px 10px',
-            boxShadow: '0 2px 8px var(--shadow-color)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            zIndex: 10
-          }}
-        >
-          <Trash2 size={20} color="#d32f2f" />
-          {window.innerWidth > 480 && (
-            <span style={{ color: '#d32f2f', fontWeight: 500, fontSize: '0.95em' }}>Limpar cache</span>
-          )}
+        <button title="Limpar cache do Excel" onClick={handleClearCache} className="clear-cache-btn">
+          <Trash2 size={22} color="#d32f2f" />
+          <span className="clear-cache-label">Limpar cache</span>
         </button>
       )}
       <header className="header">
