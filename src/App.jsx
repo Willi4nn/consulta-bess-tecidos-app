@@ -27,6 +27,14 @@ function App() {
     }
   }, []);
 
+  // Salva os dados do Excel no localStorage após o fetch online
+  useEffect(() => {
+    if (allFabrics && allFabrics.length > 0) {
+      localStorage.setItem('bessFabrics', JSON.stringify(allFabrics));
+      setLocalFabrics(allFabrics);
+    }
+  }, [allFabrics]);
+
   const fabricsToUse = localFabrics.length > 0 ? localFabrics : allFabrics;
   const filteredFabrics = useMemo(() => {
     const cleanQuery = searchQuery.trim().toLowerCase();
