@@ -1,6 +1,6 @@
 import { Search, XCircle } from 'lucide-react';
 
-const SearchBar = ({ query, onQueryChange }) => {
+export default function SearchBar({ query, onQueryChange }) {
   return (
     <form className="search-wrapper" autoComplete="off" onSubmit={e => e.preventDefault()}>
       <div className="search-inner" style={{ position: 'relative', width: '100%' }}>
@@ -33,5 +33,3 @@ const SearchBar = ({ query, onQueryChange }) => {
     </form>
   );
 };
-
-export default SearchBar;

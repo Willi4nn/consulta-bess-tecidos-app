@@ -1,12 +1,5 @@
 import { ArrowLeftCircle, BadgeDollarSign, Barcode, BookOpen, Globe, Ruler, Sparkle, Weight } from 'lucide-react';
-
-const formatPrice = (price) => {
-  if (price === null || isNaN(price)) return 'N/D';
-  return Number(price).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  });
-};
+import { formatPrice } from '../utils/formatPrice';
 
 const iconMap = {
   'Largura': <Ruler size={18} strokeWidth={2} />,
@@ -28,7 +21,7 @@ const DetailItem = ({ label, value }) => {
   );
 };
 
-const FabricDetail = ({ fabric, onBack }) => {
+export default function FabricDetail({ fabric, onBack }) {
   return (
     <div className="fabric-detail">
       <div className="detail-top-bar">
@@ -60,5 +53,3 @@ const FabricDetail = ({ fabric, onBack }) => {
     </div>
   );
 };
-
-export default FabricDetail;
