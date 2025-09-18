@@ -2,7 +2,7 @@ import { Search, XCircle } from 'lucide-react';
 
 const SearchBar = ({ query, onQueryChange }) => {
   return (
-    <form className="search-wrapper" role="search" autoComplete="off" onSubmit={e => e.preventDefault()}>
+    <form className="search-wrapper" autoComplete="off" onSubmit={e => e.preventDefault()}>
       <div className="search-inner" style={{ position: 'relative', width: '100%' }}>
         <span className="search-icon">
           <Search size={20} strokeWidth={2} />

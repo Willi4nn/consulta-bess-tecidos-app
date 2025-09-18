@@ -76,6 +76,11 @@ body {
   margin-bottom: var(--space-lg);
 }
 
+.search-inner {
+  position: relative;
+  width: 100%;
+}
+
 .search-input {
   width: 100%;
   padding: var(--space-md) 45px var(--space-md) 45px;
@@ -83,6 +88,8 @@ body {
   border: 2px solid var(--border-color);
   border-radius: 8px;
   transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
 }
 .search-input:focus {
   outline: none;
