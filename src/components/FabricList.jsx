@@ -7,10 +7,22 @@ const formatPrice = (price) => {
 };
 
 const FabricListItem = ({ fabric, onSelect }) => (
-  <div className="fabric-list-item" onClick={() => onSelect(fabric)}>
-    <div className="fabric-desc" style={{ fontWeight: 'bold' }}>{fabric?.Descrição || 'N/D'}</div>
-    <div className="fabric-code" style={{ fontWeight: 'bold' }}>{fabric?.Código}</div>
-    <div className="fabric-price" style={{ fontWeight: 'bold' }}>{formatPrice(fabric?.Preço)}</div>
+  <div
+    className="fabric-list-item"
+    onClick={() => onSelect(fabric)}
+    tabIndex={0}
+    role="button"
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onSelect(fabric);
+      }
+    }}
+  
+  >
+    <div className="fabric-desc u-bold">{fabric?.Descrição || 'N/D'}</div>
+    <div className="fabric-code u-bold">{fabric?.Código}</div>
+    <div className="fabric-price u-bold">{formatPrice(fabric?.Preço)}</div>
   </div>
 );
 
