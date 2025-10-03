@@ -1,7 +1,7 @@
 import { Search, XCircle } from 'lucide-react';
 import { useRef } from 'react';
 
-const SearchBar = ({ query, onQueryChange }) => {
+export default function SearchBar({ query, onQueryChange }) {
   const inputRef = useRef(null);
 
   const handleTouchStart = () => {
@@ -44,5 +44,3 @@ const SearchBar = ({ query, onQueryChange }) => {
     </form>
   );
 };
-
-export default SearchBar;

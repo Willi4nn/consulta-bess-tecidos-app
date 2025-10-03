@@ -27,6 +27,14 @@ function App() {
     }
   }, []);
 
+  // Salva os dados do Excel no localStorage após o fetch online
+  useEffect(() => {
+    if (allFabrics && allFabrics.length > 0) {
+      localStorage.setItem('bessFabrics', JSON.stringify(allFabrics));
+      setLocalFabrics(allFabrics);
+    }
+  }, [allFabrics]);
+
   const fabricsToUse = localFabrics.length > 0 ? localFabrics : allFabrics;
   const filteredFabrics = useMemo(() => {
     const cleanQuery = searchQuery.trim().toLowerCase();
@@ -82,46 +90,50 @@ function App() {
 
       {loading ? (
         <div className="loading">Carregando dados do Excel...</div>
-      ) : (error && localFabrics.length === 0) ? (
-        <div className="error" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '40vh', textAlign: 'center', background: 'var(--light-gray)', borderRadius: 12, boxShadow: '0 2px 12px var(--shadow-color)', padding: '2rem'
-        }}>
-          <AlertCircle size={48} strokeWidth={2.5} color="#007BFF" style={{ marginBottom: 16 }} />
-          <h2 style={{ color: '#007BFF', marginBottom: 8 }}>Não foi possível carregar a tabela</h2>
-          <div style={{ color: '#555', marginBottom: 16 }}>Erro: <span style={{ color: '#d32f2f' }}>{error}</span></div>
-          <div style={{ fontSize: '1.1em', marginBottom: 18 }}>Para usar offline, envie um arquivo Excel (.xlsx ou .xls):</div>
-          <label htmlFor="excelUpload" style={{
-            display: 'inline-block', background: 'var(--primary-color)', color: '#fff', padding: '0.7em 1.5em', borderRadius: 8, cursor: 'pointer', fontWeight: 500, marginBottom: 10, boxShadow: '0 2px 8px var(--shadow-color)'
-          }}>
-            Selecionar arquivo Excel
-            <input
-              id="excelUpload"
-              type="file"
-              accept=".xlsx,.xls"
-              style={{ display: 'none' }}
-              onChange={handleExcelUpload}
-            />
-          </label>
-          {localError && <div style={{ color: '#d32f2f', marginTop: 8, fontWeight: 500 }}>{localError}</div>}
-          <div style={{ color: '#888', fontSize: '0.95em', marginTop: 12 }}>
-            O arquivo não é enviado para nenhum servidor, apenas processado localmente no seu dispositivo.
-          </div>
-        </div>
-      ) : fabricsToUse.length === 0 ? (
-        <div className="not-found">Nenhum dado encontrado.<br />Verifique se o arquivo está acessível e se o parser está correto.</div>
       ) : (
-        <>
-          {!selectedFabric && (
-            <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
-          )}
-          <main className="results-area">
-            {selectedFabric ? (
-              <FabricDetail fabric={selectedFabric} onBack={handleBackToList} />
-            ) : (
-              <FabricList fabrics={filteredFabrics} onSelectFabric={handleSelectFabric} />
+        fabricsToUse.length === 0 ? (
+          (error ? (
+            <div className="error" style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '40vh', textAlign: 'center', background: 'var(--light-gray)', borderRadius: 12, boxShadow: '0 2px 12px var(--shadow-color)', padding: '2rem'
+            }}>
+              <AlertCircle size={48} strokeWidth={2.5} color="#007BFF" style={{ marginBottom: 16 }} />
+              <h2 style={{ color: '#007BFF', marginBottom: 8 }}>Não foi possível carregar a tabela</h2>
+              <div style={{ color: '#555', marginBottom: 16 }}>Erro: <span style={{ color: '#d32f2f' }}>{error}</span></div>
+              <div style={{ fontSize: '1.1em', marginBottom: 18 }}>Para usar offline, envie um arquivo Excel (.xlsx ou .xls):</div>
+              <label htmlFor="excelUpload" style={{
+                display: 'inline-block', background: 'var(--primary-color)', color: '#fff', padding: '0.7em 1.5em', borderRadius: 8, cursor: 'pointer', fontWeight: 500, marginBottom: 10, boxShadow: '0 2px 8px var(--shadow-color)'
+              }}>
+                Selecionar arquivo Excel
+                <input
+                  id="excelUpload"
+                  type="file"
+                  accept=".xlsx,.xls"
+                  style={{ display: 'none' }}
+                  onChange={handleExcelUpload}
+                />
+              </label>
+              {localError && <div style={{ color: '#d32f2f', marginTop: 8, fontWeight: 500 }}>{localError}</div>}
+              <div style={{ color: '#888', fontSize: '0.95em', marginTop: 12 }}>
+                O arquivo não é enviado para nenhum servidor, apenas processado localmente no seu dispositivo.
+              </div>
+            </div>
+          ) : (
+            <div className="not-found">Nenhum dado encontrado.<br />Verifique se o arquivo está acessível e se o parser está correto.</div>
+          ))
+        ) : (
+          <>
+            {!selectedFabric && (
+              <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
             )}
-          </main>
-        </>
+            <main className="results-area">
+              {selectedFabric ? (
+                <FabricDetail fabric={selectedFabric} onBack={handleBackToList} />
+              ) : (
+                <FabricList fabrics={filteredFabrics} onSelectFabric={handleSelectFabric} />
+              )}
+            </main>
+          </>
+        )
       )}
     </div>
   );
