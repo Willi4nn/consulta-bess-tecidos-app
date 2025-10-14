@@ -3,7 +3,7 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/fabrics.xlsx',
-  '/vite.svg',
+  '/logo_bess.svg',
   '/src/main.jsx',
   '/src/App.jsx',
   '/src/components/FabricList.jsx',
