@@ -4,6 +4,8 @@ const urlsToCache = [
   '/index.html',
   '/fabrics.xlsx',
   '/logo_bess.svg',
+  '/icon-192.png',
+  '/icon-512.png',
   '/src/main.jsx',
   '/src/App.jsx',
   '/src/components/FabricList.jsx',
