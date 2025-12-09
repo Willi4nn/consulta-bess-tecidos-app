@@ -1,20 +1,31 @@
-import { ArrowLeftCircle, BadgeDollarSign, Barcode, BookOpen, Globe, Ruler, Sparkle, Weight } from 'lucide-react';
+import {
+  ArrowLeftCircle,
+  BadgeDollarSign,
+  Barcode,
+  BookOpen,
+  Globe,
+  Ruler,
+  Sparkle,
+  Weight,
+} from 'lucide-react';
 import { formatPrice } from '../utils/formatPrice';
 
 const iconMap = {
-  'Largura': <Ruler size={18} strokeWidth={2} />,
-  'Origem': <Globe size={18} strokeWidth={2} />,
-  'Gramatura': <Weight size={18} strokeWidth={2} />,
-  'Acabamento': <Sparkle size={18} strokeWidth={2} />,
-  'Catálogo': <BookOpen size={18} strokeWidth={2} />,
-  'NCM': <Barcode size={18} strokeWidth={2} />,
+  Largura: <Ruler size={18} strokeWidth={2} />,
+  Origem: <Globe size={18} strokeWidth={2} />,
+  Gramatura: <Weight size={18} strokeWidth={2} />,
+  Acabamento: <Sparkle size={18} strokeWidth={2} />,
+  Catálogo: <BookOpen size={18} strokeWidth={2} />,
+  NCM: <Barcode size={18} strokeWidth={2} />,
 };
 
 const DetailItem = ({ label, value }) => {
   if (!value) return null;
   return (
     <div className="detail-item">
-      <span className="detail-icon" style={{ marginRight: 6 }}>{iconMap[label]}</span>
+      <span className="detail-icon" style={{ marginRight: 6 }}>
+        {iconMap[label]}
+      </span>
       <strong>{label}:</strong>
       <span>{value}</span>
     </div>
@@ -42,9 +53,15 @@ export default function FabricDetail({ fabric, onBack }) {
         </p>
 
         <div className="details-grid">
-          <DetailItem label="Largura" value={fabric.Largura ? `${fabric.Largura} m` : null} />
+          <DetailItem
+            label="Largura"
+            value={fabric.Largura ? `${fabric.Largura} m` : null}
+          />
           <DetailItem label="Origem" value={fabric.Origem} />
-          <DetailItem label="Gramatura" value={fabric.Gramatura ? `${fabric.Gramatura} g/ml` : null} />
+          <DetailItem
+            label="Gramatura"
+            value={fabric.Gramatura ? `${fabric.Gramatura} g/ml` : null}
+          />
           <DetailItem label="Acabamento" value={fabric.Acabamento} />
           <DetailItem label="Catálogo" value={fabric.Catálogo} />
           <DetailItem label="NCM" value={fabric.NCM} />
@@ -52,4 +69,4 @@ export default function FabricDetail({ fabric, onBack }) {
       </div>
     </div>
   );
-};
+}

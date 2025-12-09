@@ -3,16 +3,16 @@ import * as XLSX from 'xlsx';
 
 export function parseExcelToFabrics(sheetData) {
   return sheetData.map((row = {}) => ({
-    "Código": row["Código"] ?? '',
-    "Origem": row["Orig."] ?? '',
-    "Descrição": row["Descrição"] ?? '',
-    "Preço": Number.parseFloat(row["R$"] ?? 0) || 0,
-    "Largura": row["Larg."] ?? '',
-    "Unidade": row["Und."] ?? '',
-    "Gramatura": Number.parseInt(row["G/ml"] ?? 0) || 0,
-    "NCM": row["NCM"] ?? '',
-    "Catálogo": row["Catálogo"] ?? '',
-    "Acabamento": row["Acabamento"] ?? '',
+    Código: row['Código'] ?? '',
+    Origem: row['Orig.'] ?? '',
+    Descrição: row['Descrição'] ?? '',
+    Preço: parseFloat(row['R$'] ?? 0) || 0,
+    Largura: row['Larg.'] ?? '',
+    Unidade: row['Und.'] ?? '',
+    Gramatura: parseInt(row['G/ml'] ?? 0) || 0,
+    NCM: row['NCM'] ?? '',
+    Catálogo: row['Catálogo'] ?? '',
+    Acabamento: row['Acabamento'] ?? '',
   }));
 }
 
@@ -37,13 +37,17 @@ export default function useExcelData(excelUrl) {
         const parsedFabrics = parseExcelToFabrics(sheetData);
         if (isMounted) setFabrics(parsedFabrics);
       } catch (err) {
-        if (isMounted && err.name !== 'AbortError') setError(err.message || 'Erro ao processar Excel');
+        if (isMounted && err.name !== 'AbortError')
+          setError(err.message || 'Erro ao processar Excel');
       } finally {
         if (isMounted) setLoading(false);
       }
     }
     fetchExcel();
-    return () => { isMounted = false; controller.abort(); };
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, [excelUrl]);
 
   return { fabrics, loading, error };

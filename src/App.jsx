@@ -1,4 +1,4 @@
-import { AlertCircle, Trash2 } from 'lucide-react';
+import { AlertCircle, Upload } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
 import './App.css';
@@ -69,20 +69,20 @@ function App() {
     }
   };
 
-  const handleClearCache = () => {
-    localStorage.removeItem('bessFabrics');
-    setLocalFabrics([]);
-  };
-
   return (
     <div className="container" style={{ position: 'relative' }}>
-      {/* Botão de limpar cache */}
-      {localFabrics.length > 0 && (
-        <button title="Limpar cache do Excel" onClick={handleClearCache} className="clear-cache-btn">
-          <Trash2 size={22} color="#d32f2f" />
-          <span className="clear-cache-label">Limpar cache</span>
-        </button>
-      )}
+      {/* Botão de upload de planilha */}
+      <label htmlFor="excelUploadBtn" className="upload-excel-btn" title="Substituir planilha Excel">
+        <Upload size={22} color="#007bff" />
+        <span className="upload-excel-label">Substituir planilha</span>
+        <input
+          id="excelUploadBtn"
+          type="file"
+          accept=".xlsx,.xls"
+          style={{ display: 'none' }}
+          onChange={handleExcelUpload}
+        />
+      </label>
       <header className="header">
         <h1>Bess Tecidos</h1>
         <p>Tabela de Preços Digital</p>

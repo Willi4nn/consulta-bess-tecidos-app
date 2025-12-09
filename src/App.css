@@ -29,8 +29,8 @@ body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
   background-color: var(--light-gray);
   padding: var(--space-md);
   font-size: 16px;
@@ -61,6 +61,7 @@ body {
   text-align: center;
   font-size: 1.8em;
   color: #333;
+  font-family: 'Times New Roman', serif;
 }
 
 .header p {
@@ -68,6 +69,7 @@ body {
   text-align: center;
   color: var(--dark-gray);
   font-size: 1.1em;
+  font-family: 'Times New Roman', serif;
 }
 
 /* === Search Bar === */
@@ -197,16 +199,16 @@ body {
 .detail-card {
   background: var(--light-gray);
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   padding: 2rem 1rem;
 }
 
 .back-btn {
   background: var(--primary-color);
   border: 1px solid var(--border-color);
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-md) var(--space-md);
   border-radius: 8px;
-  font-size: 1em;
+  font-size: 1.3em;
   cursor: pointer;
   width: 100%;
   text-align: left;
@@ -229,7 +231,9 @@ body {
   margin-top: 0;
   margin-bottom: var(--space-xs);
 }
-.detail-title { margin-bottom: 8px; }
+.detail-title {
+  margin-bottom: 8px;
+}
 .fabric-detail .code {
   color: var(--dark-gray);
   margin-bottom: var(--space-md);
@@ -243,7 +247,9 @@ body {
   align-items: center;
   gap: var(--space-sm);
 }
-.price-row { margin-bottom: 24px; }
+.price-row {
+  margin-bottom: 24px;
+}
 .fabric-detail .price-unit {
   font-size: 0.5em;
   font-weight: 400;
@@ -253,6 +259,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--space-md);
+  width: 100%;
 }
 
 .detail-item {
@@ -260,8 +267,10 @@ body {
   padding: var(--space-md);
   border-radius: 5px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-sm);
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .detail-item strong {
@@ -270,12 +279,19 @@ body {
   font-size: 0.8em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .detail-item span {
   font-size: 1.05em;
 }
+.detail-icon {
+  flex-shrink: 0;
+}
 
-.u-bold { font-weight: bold; }
+.u-bold {
+  font-weight: bold;
+}
 
 /* === Mensagem de Não Encontrado === */
 .not-found {
@@ -354,8 +370,8 @@ body {
   margin-bottom: var(--space-md);
 }
 
-/* === Clear Cache Button === */
-.clear-cache-btn {
+/* === Upload Excel Button === */
+.upload-excel-btn {
   position: absolute;
   top: 18px;
   right: 18px;
@@ -368,25 +384,26 @@ body {
   background: var(--card-bg);
   box-shadow: 0 2px 8px var(--shadow-color);
   transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
 }
-.clear-cache-btn:hover {
-  background: #fafafa;
+.upload-excel-btn:hover {
+  background: #f0f8ff;
   box-shadow: 0 4px 12px var(--shadow-color);
 }
-.clear-cache-btn:active {
+.upload-excel-btn:active {
   transform: translateY(1px);
 }
-.clear-cache-label {
-  color: #d32f2f;
+.upload-excel-label {
+  color: var(--primary-color);
   font-weight: 500;
   font-size: 0.95em;
 }
 
 @media (max-width: 520px) {
-  .clear-cache-label {
+  .upload-excel-label {
     display: none;
   }
-  .clear-cache-btn {
+  .upload-excel-btn {
     padding: 8px;
   }
 }
