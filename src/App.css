@@ -336,7 +336,7 @@ body {
     border-radius: 8px;
   }
   .fabric-list-item > div {
-    padding: var(--space-xs) 0;
+    padding: 0.05rem 0;
     border: none;
   }
   .fabric-desc {
@@ -401,6 +401,17 @@ body {
 }
 
 @media (max-width: 520px) {
+  body {
+    padding: 0;
+  }
+  .container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: var(--space-sm);
+    border-radius: 0;
+    box-shadow: none;
+  }
   .upload-excel-label {
     display: none;
   }
