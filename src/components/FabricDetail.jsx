@@ -47,7 +47,7 @@ export default function FabricDetail({ fabric, onBack }) {
         <p className="code u-bold">Código: {fabric.Código}</p>
 
         <p className="price price-row">
-          <BadgeDollarSign size={28} strokeWidth={2} color="#28a745" />
+          <BadgeDollarSign size={35} strokeWidth={2} color="#28a745" />
           {formatPrice(fabric.Preço)}
           <span className="price-unit"> / {fabric.Unidade || 'unidade'}</span>
         </p>

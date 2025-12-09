@@ -1,4 +1,4 @@
-import FabricListItem from "./FabricListItem";
+import FabricListItem from './FabricListItem';
 
 export default function FabricList({ fabrics, onSelectFabric }) {
   if (fabrics.length === 0) {
@@ -25,4 +25,4 @@ export default function FabricList({ fabrics, onSelectFabric }) {
       ))}
     </div>
   );
-};
+}

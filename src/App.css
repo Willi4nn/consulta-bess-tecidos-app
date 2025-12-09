@@ -1,6 +1,6 @@
 /* === Variáveis Globais === */
 :root {
-  --primary-color: #007bff;
+  --primary-color: oklch(27.9% 0.041 260.031);
   --light-gray: #f4f4f9;
   --dark-gray: #6c757d;
   --border-color: #e0e0e0;
@@ -220,7 +220,7 @@ body {
   transition: background-color 0.2s;
 }
 .back-btn:hover {
-  background-color: #0056b3;
+  background-color: oklch(37.2% 0.044 257.287);
 }
 .back-btn:focus-visible {
   outline: 2px solid var(--primary-color);
@@ -267,7 +267,8 @@ body {
   padding: var(--space-md);
   border-radius: 5px;
   display: flex;
-  align-items: flex-start;
+  font-size: large;
+  align-items: center;
   gap: var(--space-sm);
   min-width: 0;
   flex-wrap: wrap;
