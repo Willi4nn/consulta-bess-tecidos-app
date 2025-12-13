@@ -1,0 +1,102 @@
+.fabric-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: calc(var(--space) * 2);
+}
+
+.fabric-list-item {
+  background: var(--card);
+  border: var(--border-base);
+  border-radius: var(--radius-sm);
+  padding: calc(var(--space) * 2.5);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.fabric-list-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fabric-list-item:hover {
+  border-color: var(--text-secondary);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-md);
+}
+.fabric-list-item:hover::before { transform: scaleX(1); }
+.fabric-list-item:active { 
+  transform: translateY(-2px) scale(0.99);
+  transition-duration: 0.1s;
+}
+.fabric-list-item:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.fabric-desc {
+  font-size: 1.12em;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.fabric-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  background: var(--bg);
+  border: var(--border-base);
+  border-radius: 5px;
+  font-size: 0.92em;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+.fabric-desc,
+.fabric-code {
+  margin-bottom: calc(var(--space) * 1.25);
+}
+.fabric-price {
+  font-size: 1.6em;
+  font-weight: 700;
+  color: var(--success);
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 2px rgba(22, 163, 74, 0.1);
+  transition: var(--transition);
+}
+.fabric-list-item:hover .fabric-price { transform: scale(1.05); }
+
+@media (max-width: 768px) {
+  .fabric-list { 
+    grid-template-columns: 1fr; 
+    gap: calc(var(--space) * 1.75); 
+  }
+  .fabric-list-item::before { 
+    width: 4px; 
+    height: 100%; 
+    right: auto; 
+    transform: scaleY(0); 
+    background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+  }
+  .fabric-list-item:hover::before { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fabric-list-item,
+  .fabric-list-item::before {
+    transition: none;
+  }
+  .fabric-list-item:hover {
+    transform: none;
+  }
+}

@@ -8,7 +8,10 @@ import {
   Sparkle,
   Weight,
 } from 'lucide-react';
+import PropTypes from 'prop-types';
+import { memo } from 'react';
 import { formatPrice } from '../utils/formatPrice';
+import './FabricDetail.css';
 
 const iconMap = {
   Largura: <Ruler size={18} strokeWidth={2} />,
@@ -19,54 +22,95 @@ const iconMap = {
   NCM: <Barcode size={18} strokeWidth={2} />,
 };
 
-const DetailItem = ({ label, value }) => {
-  if (!value) return null;
-  return (
-    <div className="detail-item">
-      <span className="detail-icon" style={{ marginRight: 6 }}>
-        {iconMap[label]}
-      </span>
-      <strong>{label}:</strong>
-      <span>{value}</span>
-    </div>
-  );
+const DetailItem = ({ label, value }) => (
+  <div className="detail-item">
+    <span className="detail-icon" aria-hidden="true">
+      {iconMap[label]}
+    </span>
+    <strong>{label}:</strong>
+    <span>{value}</span>
+  </div>
+);
+
+DetailItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-export default function FabricDetail({ fabric, onBack }) {
+function FabricDetail({ fabric, onBack }) {
+  const {
+    Descrição = 'N/D',
+    Código,
+    Preço,
+    Unidade,
+    Largura,
+    Origem,
+    Gramatura,
+    Acabamento,
+    Catálogo,
+    NCM,
+  } = fabric;
+  const detailFields = [
+    { label: 'Largura', value: Largura && `${Largura} m` },
+    { label: 'Origem', value: Origem },
+    { label: 'Gramatura', value: Gramatura && `${Gramatura} g/ml` },
+    { label: 'Acabamento', value: Acabamento },
+    { label: 'Catálogo', value: Catálogo },
+    { label: 'NCM', value: NCM },
+  ].filter(({ value }) => Boolean(value));
+
   return (
     <div className="fabric-detail">
       <div className="detail-top-bar">
-        <button id="backBtn" className="back-btn" onClick={onBack}>
-          <ArrowLeftCircle size={22} strokeWidth={2} />
-          Voltar para a lista
+        <button
+          className="btn btn-primary back-btn"
+          onClick={onBack}
+          aria-label="Voltar para lista de tecidos"
+        >
+          <ArrowLeftCircle size={20} aria-hidden="true" />
+          Voltar
         </button>
       </div>
 
-      <div className="detail-content detail-card">
-        <h2 className="detail-title">{fabric.Descrição || 'N/D'}</h2>
-        <p className="code u-bold">Código: {fabric.Código}</p>
+      <div className="detail-card">
+        <h2 className="detail-title">{Descrição}</h2>
+        <p className="code">Código: {Código}</p>
 
-        <p className="price price-row">
-          <BadgeDollarSign size={35} strokeWidth={2} color="#28a745" />
-          {formatPrice(fabric.Preço)}
-          <span className="price-unit"> / {fabric.Unidade || 'unidade'}</span>
-        </p>
+        <div
+          className="price"
+          aria-label={`Preço: ${formatPrice(Preço)} por ${
+            Unidade || 'unidade'
+          }`}
+        >
+          <BadgeDollarSign size={32} aria-hidden="true" />
+          {formatPrice(Preço)}
+          <span className="price-unit">/ {Unidade || 'un'}</span>
+        </div>
 
         <div className="details-grid">
-          <DetailItem
-            label="Largura"
-            value={fabric.Largura ? `${fabric.Largura} m` : null}
-          />
-          <DetailItem label="Origem" value={fabric.Origem} />
-          <DetailItem
-            label="Gramatura"
-            value={fabric.Gramatura ? `${fabric.Gramatura} g/ml` : null}
-          />
-          <DetailItem label="Acabamento" value={fabric.Acabamento} />
-          <DetailItem label="Catálogo" value={fabric.Catálogo} />
-          <DetailItem label="NCM" value={fabric.NCM} />
+          {detailFields.map(({ label, value }) => (
+            <DetailItem key={label} label={label} value={value} />
+          ))}
         </div>
       </div>
     </div>
   );
 }
+
+FabricDetail.propTypes = {
+  fabric: PropTypes.shape({
+    Código: PropTypes.string,
+    Descrição: PropTypes.string,
+    Preço: PropTypes.number,
+    Unidade: PropTypes.string,
+    Largura: PropTypes.string,
+    Origem: PropTypes.string,
+    Gramatura: PropTypes.number,
+    Acabamento: PropTypes.string,
+    Catálogo: PropTypes.string,
+    NCM: PropTypes.string,
+  }).isRequired,
+  onBack: PropTypes.func.isRequired,
+};
+
+export default memo(FabricDetail);

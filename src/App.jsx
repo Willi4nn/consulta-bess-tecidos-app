@@ -1,28 +1,67 @@
-import { AlertCircle, Upload } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Upload } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
 import './App.css';
 import FabricDetail from './components/FabricDetail';
 import FabricList from './components/FabricList';
 import SearchBar from './components/SearchBar';
+import SkeletonLoader from './components/SkeletonLoader';
+import { CONFIG, ERROR_MESSAGES, EXCEL_ACCEPT, STORAGE_KEY } from './constants';
 import useExcelData, { parseExcelToFabrics } from './hooks/useExcelData';
+
+const SEARCH_DEBOUNCE_MS = 300;
+const SHEET_PRIORITY = Array.from(
+  new Set([CONFIG.DEFAULT_SHEET_INDEX, CONFIG.FALLBACK_SHEET_INDEX, 0])
+);
+
+const pickSheet = (workbook) => {
+  const name =
+    SHEET_PRIORITY.map((index) => workbook.SheetNames[index]).find(Boolean) ??
+    workbook.SheetNames[0];
+
+  return workbook.Sheets[name];
+};
+
+const toastIcons = {
+  success: <CheckCircle2 size={20} aria-hidden="true" />,
+  error: <AlertCircle size={20} aria-hidden="true" />,
+};
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectedFabric, setSelectedFabric] = useState(null);
   const { fabrics: allFabrics, loading, error } = useExcelData('/fabrics.xlsx');
   const [localFabrics, setLocalFabrics] = useState([]);
   const [localError, setLocalError] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  // Debounce para search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Auto-hide toast
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   // Carrega do localStorage ao iniciar
   useEffect(() => {
-    const saved = localStorage.getItem('bessFabrics');
+    const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
         const arr = JSON.parse(saved);
         if (Array.isArray(arr) && arr.length > 0) setLocalFabrics(arr);
       } catch (err) {
         console.error('Erro ao ler dados do localStorage:', err);
+        localStorage.removeItem(STORAGE_KEY);
       }
     }
   }, []);
@@ -30,110 +69,165 @@ function App() {
   // Salva os dados do Excel no localStorage após o fetch online
   useEffect(() => {
     if (allFabrics && allFabrics.length > 0) {
-      localStorage.setItem('bessFabrics', JSON.stringify(allFabrics));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allFabrics));
       setLocalFabrics(allFabrics);
     }
   }, [allFabrics]);
 
-  const fabricsToUse = localFabrics.length > 0 ? localFabrics : allFabrics;
+  const fabricsToUse = localFabrics.length ? localFabrics : allFabrics;
   const filteredFabrics = useMemo(() => {
-    const cleanQuery = searchQuery.trim().toLowerCase();
+    const cleanQuery = debouncedQuery.trim().toLowerCase();
     if (!cleanQuery) return fabricsToUse;
-    const normalizedCodeQuery = cleanQuery.replace(/[\s-]+/g, '');
-    return fabricsToUse.filter(item => {
-      const itemCode = String(item['Código'] || '').toLowerCase().replace(/[\s-]+/g, '');
-      const itemDesc = String(item['Descrição'] || '').toLowerCase();
-      return itemCode.includes(normalizedCodeQuery) || itemDesc.includes(cleanQuery);
-    });
-  }, [searchQuery, fabricsToUse]);
 
-  const handleSelectFabric = (fabric) => setSelectedFabric(fabric);
-  const handleBackToList = () => setSelectedFabric(null);
+    const normalizedCodeQuery = cleanQuery.replace(/[\s-]+/g, '');
+    return fabricsToUse.filter(({ Código = '', Descrição = '' }) => {
+      const sanitizedCode = Código.toLowerCase().replace(/[\s-]+/g, '');
+      return (
+        sanitizedCode.includes(normalizedCodeQuery) ||
+        Descrição.toLowerCase().includes(cleanQuery)
+      );
+    });
+  }, [debouncedQuery, fabricsToUse]);
 
   // Função para processar upload do Excel e salvar no localStorage
-  const handleExcelUpload = async (e) => {
+  const handleExcelUpload = async ({ target }) => {
     setLocalError(null);
-    const file = e.target.files[0];
+    const file = target.files?.[0];
     if (!file) return;
+
     try {
       const data = await file.arrayBuffer();
       const workbook = XLSX.read(data, { type: 'array' });
-      const sheetName = workbook.SheetNames[1] || workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const sheetData = XLSX.utils.sheet_to_json(sheet);
+      const sheetData = XLSX.utils.sheet_to_json(pickSheet(workbook));
       const parsedFabrics = parseExcelToFabrics(sheetData);
       setLocalFabrics(parsedFabrics);
-      localStorage.setItem('bessFabrics', JSON.stringify(parsedFabrics));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedFabrics));
+      setToast({
+        type: 'success',
+        message: `${parsedFabrics.length} tecidos carregados com sucesso!`,
+      });
+      target.value = '';
     } catch (err) {
-      setLocalError('Erro ao processar Excel: ' + (err.message || 'Formato inválido'));
+      const errorMsg = `${ERROR_MESSAGES.EXCEL_PARSE}: ${
+        err.message || ERROR_MESSAGES.INVALID_FORMAT
+      }`;
+      setLocalError(errorMsg);
+      setToast({ type: 'error', message: errorMsg });
     }
   };
 
   return (
-    <div className="container" style={{ position: 'relative' }}>
-      {/* Botão de upload de planilha */}
-      <label htmlFor="excelUploadBtn" className="upload-excel-btn" title="Substituir planilha Excel">
-        <Upload size={22} color="#007bff" />
-        <span className="upload-excel-label">Substituir planilha</span>
-        <input
-          id="excelUploadBtn"
-          type="file"
-          accept=".xlsx,.xls"
-          style={{ display: 'none' }}
-          onChange={handleExcelUpload}
-        />
-      </label>
-      <header className="header">
-        <h1>Bess Tecidos</h1>
-        <p>Tabela de Preços Digital</p>
+    <div className="container">
+      <header className="header" role="banner">
+        <div className="header-top">
+          <div className="header-title">
+            <h1>Bess Tecidos</h1>
+            <p>Tabela de Preços Digital</p>
+          </div>
+          <label
+            htmlFor="excelUploadBtn"
+            className="btn upload-excel-btn"
+            title="Substituir planilha Excel"
+            role="button"
+            tabIndex={0}
+            aria-label="Fazer upload de nova planilha Excel"
+          >
+            <Upload size={22} aria-hidden="true" />
+            <span className="upload-excel-label">Substituir planilha</span>
+            <input
+              id="excelUploadBtn"
+              type="file"
+              accept={EXCEL_ACCEPT}
+              className="file-input"
+              onChange={handleExcelUpload}
+              aria-label="Selecionar arquivo Excel"
+            />
+          </label>
+        </div>
       </header>
 
+      {/* Toast Notification */}
+      {toast && (
+        <div
+          className={`toast toast-${toast.type}`}
+          role="alert"
+          aria-live="assertive"
+        >
+          {toastIcons[toast.type] ?? toastIcons.error}
+          <span>{toast.message}</span>
+          <button
+            className="toast-close"
+            onClick={() => setToast(null)}
+            aria-label="Fechar notificação"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {loading ? (
-        <div className="loading">Carregando dados do Excel...</div>
-      ) : (
-        fabricsToUse.length === 0 ? (
-          (error ? (
-            <div className="error" style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '40vh', textAlign: 'center', background: 'var(--light-gray)', borderRadius: 12, boxShadow: '0 2px 12px var(--shadow-color)', padding: '2rem'
-            }}>
-              <AlertCircle size={48} strokeWidth={2.5} color="#007BFF" style={{ marginBottom: 16 }} />
-              <h2 style={{ color: '#007BFF', marginBottom: 8 }}>Não foi possível carregar a tabela</h2>
-              <div style={{ color: '#555', marginBottom: 16 }}>Erro: <span style={{ color: '#d32f2f' }}>{error}</span></div>
-              <div style={{ fontSize: '1.1em', marginBottom: 18 }}>Para usar offline, envie um arquivo Excel (.xlsx ou .xls):</div>
-              <label htmlFor="excelUpload" style={{
-                display: 'inline-block', background: 'var(--primary-color)', color: '#fff', padding: '0.7em 1.5em', borderRadius: 8, cursor: 'pointer', fontWeight: 500, marginBottom: 10, boxShadow: '0 2px 8px var(--shadow-color)'
-              }}>
+        <div className="loading-container">
+          <SkeletonLoader />
+        </div>
+      ) : fabricsToUse.length === 0 ? (
+        error ? (
+          <div className="error" role="alert">
+            <AlertCircle
+              className="error-icon"
+              size={48}
+              strokeWidth={2.5}
+              aria-hidden="true"
+            />
+            <h2>Não foi possível carregar a tabela</h2>
+            <p className="error-message">
+              Erro: <span>{error}</span>
+            </p>
+            <p>Para usar offline, envie um arquivo Excel (.xlsx ou .xls):</p>
+            <div className="error-actions">
+              <label htmlFor="excelUpload" className="btn upload-excel-btn">
                 Selecionar arquivo Excel
                 <input
                   id="excelUpload"
                   type="file"
-                  accept=".xlsx,.xls"
-                  style={{ display: 'none' }}
+                  accept={EXCEL_ACCEPT}
+                  className="file-input"
                   onChange={handleExcelUpload}
+                  aria-label="Selecionar arquivo Excel para upload"
                 />
               </label>
-              {localError && <div style={{ color: '#d32f2f', marginTop: 8, fontWeight: 500 }}>{localError}</div>}
-              <div style={{ color: '#888', fontSize: '0.95em', marginTop: 12 }}>
-                O arquivo não é enviado para nenhum servidor, apenas processado localmente no seu dispositivo.
-              </div>
+              {localError && <p className="error-message">{localError}</p>}
+              <p className="error-note">
+                O arquivo não é enviado para nenhum servidor, apenas processado
+                localmente no seu dispositivo.
+              </p>
             </div>
-          ) : (
-            <div className="not-found">Nenhum dado encontrado.<br />Verifique se o arquivo está acessível e se o parser está correto.</div>
-          ))
+          </div>
         ) : (
-          <>
-            {!selectedFabric && (
-              <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
-            )}
-            <main className="results-area">
-              {selectedFabric ? (
-                <FabricDetail fabric={selectedFabric} onBack={handleBackToList} />
-              ) : (
-                <FabricList fabrics={filteredFabrics} onSelectFabric={handleSelectFabric} />
-              )}
-            </main>
-          </>
+          <div className="not-found">
+            Nenhum dado encontrado.
+            <br />
+            Verifique se o arquivo está acessível e se o parser está correto.
+          </div>
         )
+      ) : (
+        <>
+          {!selectedFabric && (
+            <SearchBar query={searchQuery} onQueryChange={setSearchQuery} />
+          )}
+          <main className="results-area">
+            {selectedFabric ? (
+              <FabricDetail
+                fabric={selectedFabric}
+                onBack={() => setSelectedFabric(null)}
+              />
+            ) : (
+              <FabricList
+                fabrics={filteredFabrics}
+                onSelectFabric={setSelectedFabric}
+              />
+            )}
+          </main>
+        </>
       )}
     </div>
   );

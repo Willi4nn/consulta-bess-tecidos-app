@@ -1,25 +1,38 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-    <link rel="apple-touch-icon" href="/icon-192.png">
-    <meta name="theme-color" content="#5f27cd">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="/manifest.json">
-    <title>Bess Tecidos - Tabela de Preços</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <meta name="theme-color" content="#5f27cd">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.json">
+  <title>Bess Tecidos - Tabela de Preços</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+      if (isDev) {
+        // Desregistra service worker em desenvolvimento
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          registrations.forEach(reg => reg.unregister());
+        });
+      } else {
+        // Registra service worker apenas em produção
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/service-worker.js')
             .then(reg => console.log('Service Worker registrado:', reg))
             .catch(err => console.log('Service Worker falhou:', err));
         });
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>

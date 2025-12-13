@@ -1,23 +1,41 @@
-import { formatPrice } from "../utils/formatPrice";
+import PropTypes from 'prop-types';
+import { memo } from 'react';
+import { formatPrice } from '../utils/formatPrice';
 
-export default function FabricListItem({ fabric, onSelect }) {
+const ACTIVATION_KEYS = new Set(['Enter', ' ']);
+
+function FabricListItem({ fabric, onSelect }) {
+  const { Descrição = 'N/D', Código, Preço } = fabric;
+  const triggerSelect = () => onSelect(fabric);
+  const handleKeyDown = (event) => {
+    if (!ACTIVATION_KEYS.has(event.key)) return;
+    event.preventDefault();
+    triggerSelect();
+  };
+
   return (
     <div
       className="fabric-list-item"
-      onClick={() => onSelect(fabric)}
-      tabIndex={0}
+      onClick={triggerSelect}
+      onKeyDown={handleKeyDown}
       role="button"
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onSelect(fabric);
-        }
-      }}
-
+      tabIndex={0}
+      aria-label={`Ver detalhes de ${Descrição || 'tecido'}, código ${Código}`}
     >
-      <div className="fabric-desc u-bold">{fabric?.Descrição || 'N/D'}</div>
-      <div className="fabric-code u-bold">{fabric?.Código}</div>
-      <div className="fabric-price u-bold">{formatPrice(fabric?.Preço)}</div>
+      <div className="fabric-desc">{Descrição}</div>
+      <div className="fabric-code">{Código}</div>
+      <div className="fabric-price">{formatPrice(Preço)}</div>
     </div>
-  )
-} 
+  );
+}
+
+FabricListItem.propTypes = {
+  fabric: PropTypes.shape({
+    Código: PropTypes.string,
+    Descrição: PropTypes.string,
+    Preço: PropTypes.number,
+  }).isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
+
+export default memo(FabricListItem);
