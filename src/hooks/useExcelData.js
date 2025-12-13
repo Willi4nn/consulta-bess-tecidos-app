@@ -6,7 +6,7 @@ export function parseExcelToFabrics(sheetData) {
     Código: row['Código'] ?? '',
     Origem: row['Orig.'] ?? '',
     Descrição: row['Descrição'] ?? '',
-    Preço: parseFloat(row['R$'] ?? 0) || 0,
+    Preço: parseFloat(row['R$'] ?? 0) + 6 || 0,
     Largura: row['Larg.'] ?? '',
     Unidade: row['Und.'] ?? '',
     Gramatura: parseInt(row['G/ml'] ?? 0) || 0,
