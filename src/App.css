@@ -104,6 +104,9 @@ body {
 .results-area {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 /* === Botões === */
@@ -388,6 +391,13 @@ body {
   }
   .container {
     padding: calc(var(--space) * 2.5);
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .results-area {
+    flex: initial;
+    overflow: visible;
   }
   .header-title h1 {
     font-size: 1.7em;
