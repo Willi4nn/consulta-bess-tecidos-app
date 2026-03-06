@@ -50,7 +50,7 @@ function FabricDetail({ fabric, onBack }) {
     NCM,
   } = fabric;
 
-  const preçoLiquido = Preço * 0.70 * 0.95;
+  const preçoLiquido = Preço * 0.7 * 0.95;
 
   const [metros, setMetros] = useState(1);
 
