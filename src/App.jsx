@@ -1,37 +1,28 @@
 import { AlertCircle, CheckCircle2, Upload } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import * as XLSX from 'xlsx';
 import './App.css';
 import FabricDetail from './components/FabricDetail';
 import FabricList from './components/FabricList';
 import SearchBar from './components/SearchBar';
 import SkeletonLoader from './components/SkeletonLoader';
-import { CONFIG, ERROR_MESSAGES, EXCEL_ACCEPT, STORAGE_KEY } from './constants';
-import useExcelData, { parseExcelToFabrics } from './hooks/useExcelData';
+import { STORAGE_KEY } from './constants';
+import { useExcelData } from './hooks/useExcelData';
+import { parseExcel, parsePDF } from './services/fabricService';
 
 const SEARCH_DEBOUNCE_MS = 300;
-const SHEET_PRIORITY = Array.from(
-  new Set([CONFIG.DEFAULT_SHEET_INDEX, CONFIG.FALLBACK_SHEET_INDEX, 0])
-);
-
-const pickSheet = (workbook) => {
-  const name =
-    SHEET_PRIORITY.map((index) => workbook.SheetNames[index]).find(Boolean) ??
-    workbook.SheetNames[0];
-
-  return workbook.Sheets[name];
-};
 
 const toastIcons = {
   success: <CheckCircle2 size={20} aria-hidden="true" />,
   error: <AlertCircle size={20} aria-hidden="true" />,
 };
 
+const FILE_ACCEPT = '.xlsx, .xls, .pdf';
+
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectedFabric, setSelectedFabric] = useState(null);
-  const { fabrics: allFabrics, loading, error } = useExcelData('/fabrics.xlsx');
+  const { fabrics: allFabrics, loading, error } = useExcelData();
   const [localFabrics, setLocalFabrics] = useState([]);
   const [localError, setLocalError] = useState(null);
   const [toast, setToast] = useState(null);
@@ -75,6 +66,7 @@ function App() {
   }, [allFabrics]);
 
   const fabricsToUse = localFabrics.length ? localFabrics : allFabrics;
+
   const filteredFabrics = useMemo(() => {
     const cleanQuery = debouncedQuery.trim().toLowerCase();
     if (!cleanQuery) return fabricsToUse;
@@ -90,32 +82,42 @@ function App() {
   }, [debouncedQuery, fabricsToUse]);
 
   // Função para processar upload do Excel e salvar no localStorage
-  const handleExcelUpload = async ({ target }) => {
+  const handleFileUpload = async ({ target }) => {
     setLocalError(null);
     const file = target.files?.[0];
     if (!file) return;
 
+    const isPDF = file.name.toLowerCase().endsWith('.pdf');
+
     try {
-      const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheetData = XLSX.utils.sheet_to_json(pickSheet(workbook));
-      const parsedFabrics = parseExcelToFabrics(sheetData);
+      const buffer = await file.arrayBuffer();
+      let parsedFabrics = [];
+
+      if (isPDF) {
+        parsedFabrics = await parsePDF(buffer);
+      } else {
+        parsedFabrics = parseExcel(buffer);
+      }
+
+      if (parsedFabrics.length === 0)
+        throw new Error('Nenhum dado encontrado no arquivo.');
+
       setLocalFabrics(parsedFabrics);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedFabrics));
+
       setToast({
         type: 'success',
-        message: `${parsedFabrics.length} tecidos carregados com sucesso!`,
+        message: `${parsedFabrics.length} tecidos carregados do ${isPDF ? 'PDF' : 'Excel'}!`,
       });
       target.value = '';
     } catch (err) {
-      const errorMsg = `${ERROR_MESSAGES.EXCEL_PARSE}: ${
-        err.message || ERROR_MESSAGES.INVALID_FORMAT
-      }`;
+      const errorMsg = `Erro ao processar ${isPDF ? 'PDF' : 'Excel'}: ${err.message}`;
       setLocalError(errorMsg);
       setToast({ type: 'error', message: errorMsg });
     }
   };
 
+  // No seu JSX, atualize os botões e labels:
   return (
     <div className="container">
       <header className="header" role="banner">
@@ -124,23 +126,17 @@ function App() {
             <h1>Bess Tecidos</h1>
             <p>Tabela de Preços Digital</p>
           </div>
-          <label
-            htmlFor="excelUploadBtn"
-            className="btn upload-excel-btn"
-            title="Substituir planilha Excel"
-            role="button"
-            tabIndex={0}
-            aria-label="Fazer upload de nova planilha Excel"
-          >
+          <label htmlFor="fileUploadBtn" className="btn upload-excel-btn">
             <Upload size={22} aria-hidden="true" />
-            <span className="upload-excel-label">Substituir planilha</span>
+            <span className="upload-excel-label">
+              Substituir Arquivo (PDF/Excel)
+            </span>
             <input
-              id="excelUploadBtn"
+              id="fileUploadBtn"
               type="file"
-              accept={EXCEL_ACCEPT}
+              accept={FILE_ACCEPT} // Use a nova constante aqui
               className="file-input"
-              onChange={handleExcelUpload}
-              aria-label="Selecionar arquivo Excel"
+              onChange={handleFileUpload}
             />
           </label>
         </div>
@@ -182,17 +178,17 @@ function App() {
             <p className="error-message">
               Erro: <span>{error}</span>
             </p>
-            <p>Para usar offline, envie um arquivo Excel (.xlsx ou .xls):</p>
+            <p>Para usar offline, envie um arquivo Excel ou PDF:</p>
             <div className="error-actions">
               <label htmlFor="excelUpload" className="btn upload-excel-btn">
-                Selecionar arquivo Excel
+                Selecionar arquivo (PDF/Excel)
                 <input
                   id="excelUpload"
                   type="file"
-                  accept={EXCEL_ACCEPT}
+                  accept={FILE_ACCEPT}
                   className="file-input"
-                  onChange={handleExcelUpload}
-                  aria-label="Selecionar arquivo Excel para upload"
+                  onChange={handleFileUpload}
+                  aria-label="Selecionar arquivo PDF ou Excel para upload"
                 />
               </label>
               {localError && <p className="error-message">{localError}</p>}

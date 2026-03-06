@@ -1,12 +1,4 @@
 const CACHE_NAME = 'bess-tecidos-cache-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/fabrics.xlsx',
-  '/logo_bess.svg',
-  '/icon-192.png',
-  '/icon-512.png',
-];
 
 // Detecta se está em modo de desenvolvimento
 const isDev =
@@ -20,8 +12,32 @@ self.addEventListener('install', (event) => {
     return;
   }
 
+  // Arquivos essenciais (devem existir)
+  const required = [
+    '/',
+    '/index.html',
+    '/logo_bess.svg',
+    '/icon-192.png',
+    '/icon-512.png',
+  ];
+  // Arquivos opcionais: apenas um deles estará presente
+  const optional = ['/fabrics.xlsx', '/fabrics.pdf'];
+
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await cache.addAll(required);
+      await Promise.all(
+        optional.map((url) =>
+          fetch(url)
+            .then((res) => {
+              if (res.ok) return cache.put(url, res);
+            })
+            .catch(() => {
+              /* arquivo não existe, ignora */
+            })
+        )
+      );
+    })
   );
 });
 

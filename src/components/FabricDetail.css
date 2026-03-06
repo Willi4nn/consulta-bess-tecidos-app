@@ -29,6 +29,7 @@
   color: var(--text);
   line-height: 1.3;
 }
+
 .code {
   display: inline-flex;
   align-items: center;
@@ -44,30 +45,224 @@
   font-family: var(--font-mono);
 }
 
-.price {
-  font-size: 2.65em;
-  font-weight: 700;
-  color: var(--success);
-  display: flex;
-  align-items: center;
-  gap: calc(var(--space) * 1.25);
+/* ── Hero: Preço para o Cliente ── */
+.hero-cliente {
+  background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0.03) 100%);
+  border: 2px solid rgba(59,130,246,0.25);
+  border-radius: var(--radius);
+  padding: calc(var(--space) * 3);
   margin-bottom: calc(var(--space) * 3);
-  padding: calc(var(--space) * 2.25);
-  background: linear-gradient(
-    135deg,
-    rgba(22, 163, 74, 0.05) 0%,
-    rgba(22, 163, 74, 0.02) 100%
-  );
-  border: 1px solid rgba(22, 163, 74, 0.1);
-  border-radius: var(--radius-sm);
-  letter-spacing: -0.03em;
+  text-align: center;
 }
-.price-unit {
-  font-size: 0.5em;
+
+.hero-cliente-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  opacity: 0.7;
+  margin-bottom: calc(var(--space) * 1);
+}
+
+.hero-cliente-valor {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+}
+
+.hero-cliente-valor em {
+  font-style: normal;
+  font-size: 0.4em;
   font-weight: 500;
   color: var(--text-secondary);
 }
 
+.hero-cliente-detalhe {
+  margin-top: calc(var(--space) * 1.25);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+  .hero-cliente-valor { font-size: 2.25rem; }
+}
+
+/* ── Calculadora ── */
+.calculator-section {
+  background: var(--bg);
+  border: var(--border-base);
+  border-radius: var(--radius-sm);
+  padding: calc(var(--space) * 2.5);
+  margin-bottom: calc(var(--space) * 3);
+}
+
+.calculator-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 calc(var(--space) * 1.75) 0;
+}
+
+.calculator-input-row {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--space) * 1.25);
+}
+
+.calculator-input {
+  width: 90px;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  background: var(--card);
+  color: var(--text);
+  outline: none;
+  transition: var(--transition);
+}
+
+.calculator-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+
+.calculator-input-unit {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.calculator-results {
+  margin-top: calc(var(--space) * 2);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--space) * 1);
+}
+
+.calc-result-primary {
+  background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0.03) 100%);
+  border: 1.5px solid rgba(59,130,246,0.2);
+  border-radius: var(--radius-sm);
+  padding: calc(var(--space) * 2) calc(var(--space) * 2.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calc-result-primary-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0.75;
+}
+
+.calc-result-primary-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+}
+
+.calc-result-secondary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: calc(var(--space) * 0.5) calc(var(--space) * 0.5);
+}
+
+.calc-result-secondary span:last-child {
+  font-weight: 600;
+  color: var(--text);
+}
+
+@media (max-width: 480px) {
+  .calc-result-primary { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .calc-result-primary-value { font-size: 1.5rem; }
+}
+
+/* ── Meu Custo (colapsível) ── */
+.meu-custo-details {
+  margin-bottom: calc(var(--space) * 3);
+  border: var(--border-base);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.meu-custo-details summary {
+  padding: calc(var(--space) * 1.5) calc(var(--space) * 2);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meu-custo-details summary::before {
+  content: '▶';
+  font-size: 0.6em;
+  transition: transform 0.2s;
+}
+
+.meu-custo-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.meu-custo-details summary:hover {
+  background: var(--bg);
+}
+
+.meu-custo-body {
+  padding: calc(var(--space) * 1.5) calc(var(--space) * 2);
+  border-top: var(--border-base);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--space) * 0.75);
+  background: var(--bg);
+}
+
+.meu-custo-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.meu-custo-row span:last-child {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.meu-custo-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--success);
+  padding-top: calc(var(--space) * 0.75);
+  margin-top: calc(var(--space) * 0.25);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Grid de detalhes ── */
 .details-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -102,6 +297,7 @@
 }
 .detail-item:hover .detail-icon { opacity: 1; }
 
+/* ── Responsivo ── */
 @media (max-width: 768px) {
   .details-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -109,6 +305,7 @@
   }
   .detail-card { padding: calc(var(--space) * 2.5); }
 }
+
 @media (max-width: 640px) {
   .detail-title {
     font-size: 1.55em;
@@ -119,12 +316,9 @@
     padding: 5px 11px;
     margin-bottom: calc(var(--space) * 1.75);
   }
-  .price {
-    font-size: 2.15em;
-    padding: calc(var(--space) * 1.75);
-    gap: calc(var(--space) * 0.875);
-    margin-bottom: calc(var(--space) * 2.25);
-  }
+  .price { font-size: 2em; padding: calc(var(--space) * 1.75); }
+  .price-frete { font-size: 1.5em; }
+  .price-total { font-size: 1.7em; }
   .details-grid {
     grid-template-columns: 1fr;
     gap: calc(var(--space) * 1.25);
@@ -136,10 +330,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .detail-item {
-    transition: none;
-  }
-  .detail-item:hover {
-    transform: none;
-  }
+  .detail-item { transition: none; }
+  .detail-item:hover { transform: none; }
 }

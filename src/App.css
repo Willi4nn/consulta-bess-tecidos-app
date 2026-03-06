@@ -157,11 +157,9 @@ body {
 }
 
 .upload-excel-btn {
-  padding: calc(var(--space) * 1.5) calc(var(--space) * 2.5);
   background: var(--gradient-primary);
   border: none;
   color: #fff;
-  margin-left: auto;
   box-shadow: var(--shadow);
 }
 .upload-excel-btn:hover {
