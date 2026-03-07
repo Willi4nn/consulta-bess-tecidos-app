@@ -19,6 +19,8 @@ export function FabricModal({
 
   const baseTotal = fabric.price * metrosNum;
   const freight = calcFreight(baseTotal);
+  const freightPerMeter = metrosNum > 0 ? freight / metrosNum : freight1m;
+  const clientPricePerMeter = fabric.price + freightPerMeter;
   const totalWithFreight = baseTotal + freight;
 
   const details = [
@@ -132,10 +134,18 @@ export function FabricModal({
               <span className="text-gray-500 text-sm font-medium">metros</span>
             </div>
             {metrosNum > 0 && (
-              <div className="mt-3">
+              <div className="mt-3 grid grid-cols-2 gap-2">
                 <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3">
                   <p className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider mb-1">
-                    Total para o cliente (com frete)
+                    Cobrar / Metro
+                  </p>
+                  <p className="text-lg font-extrabold text-emerald-700 tracking-tight">
+                    {formatBRL(clientPricePerMeter)}
+                  </p>
+                </div>
+                <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3">
+                  <p className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider mb-1">
+                    Total do cliente
                   </p>
                   <p className="text-lg font-extrabold text-emerald-700 tracking-tight">
                     {formatBRL(totalWithFreight)}
