@@ -10,10 +10,10 @@ export function LoadingScreen() {
             <Loader2 className="h-8 w-8 text-emerald-600 animate-spin" />
           </div>
         </div>
-        <p className="text-gray-600 font-semibold text-base">
-          Carregando catálogo...
+        <p className="text-gray-700 font-bold text-lg">Carregando tecidos...</p>
+        <p className="text-gray-500 text-sm mt-1">
+          Só mais um momento, por favor.
         </p>
-        <p className="text-gray-400 text-sm mt-1">Aguarde um momento</p>
       </div>
     </div>
   );

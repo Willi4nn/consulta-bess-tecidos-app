@@ -32,11 +32,13 @@ export function Pagination({
   return (
     <div className="border-t border-gray-100 px-5 py-4 flex items-center justify-between gap-4 bg-gray-50/50">
       <p className="text-sm text-gray-500 hidden sm:block shrink-0">
+        Mostrando de{' '}
         <span className="font-semibold text-gray-700">{rangeStart}</span>
-        {' – '}
+        {' até '}
         <span className="font-semibold text-gray-700">{rangeEnd}</span>
         {' de '}
         <span className="font-semibold text-gray-700">{totalItems}</span>
+        {' tecidos'}
       </p>
 
       <div className="flex sm:hidden flex-1 justify-between">

@@ -30,7 +30,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-50/70 font-sans text-gray-900">
       <div className="h-1 w-full bg-linear-to-r from-emerald-400 via-emerald-500 to-teal-500" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <Header />
 
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -42,21 +42,21 @@ export default function App() {
             shadow="shadow-blue-200 shadow-md"
           />
           <StatsCard
-            title="Preço Médio"
+            title="Preço Médio (Metro)"
             value={`R$ ${stats.averagePrice.toFixed(2)}`}
             icon={DollarSign}
             gradient="from-emerald-500 to-teal-600"
             shadow="shadow-emerald-200 shadow-md"
           />
           <StatsCard
-            title="Nacionais"
+            title="Tecidos Nacionais"
             value={stats.nationalCount.toString()}
             icon={Tag}
             gradient="from-violet-500 to-purple-600"
             shadow="shadow-violet-200 shadow-md"
           />
           <StatsCard
-            title="Importados"
+            title="Tecidos Importados"
             value={stats.importedCount.toString()}
             icon={Ruler}
             gradient="from-orange-400 to-orange-600"

@@ -14,7 +14,7 @@ export function SearchBar({
       </div>
       <input
         type="text"
-        placeholder="Buscar tecido por nome ou código..."
+        placeholder="Digite o nome ou código do tecido para buscar..."
         className="block w-full pl-12 pr-10 py-4 border border-gray-200 rounded-2xl bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/30 focus:border-emerald-400 text-base shadow-sm transition-all"
         value={value}
         onChange={(e) => onChange(e.target.value)}

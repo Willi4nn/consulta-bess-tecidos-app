@@ -22,11 +22,11 @@ interface Column {
 
 const COLUMNS: Column[] = [
   { label: 'Código', key: 'code' },
-  { label: 'Descrição', key: 'description' },
-  { label: 'Preço (R$)', key: 'price' },
+  { label: 'Descrição/Nome', key: 'description' },
+  { label: 'Preço (Metro)', key: 'price' },
   { label: 'Origem', key: 'origin' },
   { label: 'Situação', key: 'status' },
-  { label: 'Largura', key: 'width' },
+  { label: 'Tamanho', key: 'width' },
   { label: 'Catálogo', key: 'catalog' },
 ];
 
@@ -162,17 +162,18 @@ export function FabricTable({ data }: { data: Fabric[] }) {
                 <div className="flex items-center gap-2 mb-3">
                   {fabric.width > 0 && (
                     <span className="text-xs bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 text-gray-500">
-                      Larg: {formatDecimal(fabric.width)}m
+                      Tamanho: {formatDecimal(fabric.width)}m
                     </span>
                   )}
                   {fabric.catalog && (
                     <span className="text-xs bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100 text-gray-500">
-                      Cat: {fabric.catalog}
+                      Catálogo: {fabric.catalog}
                     </span>
                   )}
                 </div>
-                <div className="flex items-center justify-end text-xs text-gray-400 font-medium">
-                  Ver detalhes <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+                <div className="flex items-center justify-end text-xs text-gray-400 font-medium group-hover:text-emerald-500 transition-colors">
+                  Toque para calcular{' '}
+                  <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
                 </div>
               </div>
             ))

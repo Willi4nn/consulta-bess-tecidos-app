@@ -119,7 +119,7 @@ export function FabricModal({
           <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
             <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold mb-3 flex items-center gap-1.5">
               <Ruler className="h-3.5 w-3.5" />
-              Simulador de metros
+              Calculadora de preço
             </p>
             <div className="flex items-center gap-3">
               <input
@@ -129,6 +129,7 @@ export function FabricModal({
                 value={metros}
                 onChange={(e) => setMetros(e.target.value)}
                 className="w-20 text-center font-bold text-lg border-2 border-gray-200 focus:border-gray-800 rounded-lg py-2 outline-none transition-colors"
+                aria-label="Quantidade em metros"
               />
               <span className="text-gray-500 text-sm font-medium">metros</span>
             </div>
@@ -136,7 +137,7 @@ export function FabricModal({
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3">
                   <p className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider mb-1">
-                    Cliente paga
+                    Total para o cliente
                   </p>
                   <p className="text-lg font-extrabold text-emerald-700 tracking-tight">
                     {formatBRL(fabric.price * metrosNum)}
@@ -144,7 +145,7 @@ export function FabricModal({
                 </div>
                 <div className="bg-gray-100 border border-gray-200 rounded-lg p-3">
                   <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1">
-                    Meu custo
+                    Custo total
                   </p>
                   <p className="text-lg font-extrabold text-gray-800 tracking-tight">
                     {formatBRL(meuPreco * metrosNum)}
@@ -179,7 +180,7 @@ export function FabricModal({
             onClick={onClose}
             className="w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-bold hover:bg-gray-700 transition-colors"
           >
-            Fechar
+            Fechar Detalhes
           </button>
         </div>
       </motion.div>
