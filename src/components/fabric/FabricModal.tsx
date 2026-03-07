@@ -2,7 +2,7 @@ import { Info, Ruler, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { Fabric } from '../../data/fabrics';
-import { formatBRL, formatDecimal } from '../../utils/formatters';
+import { calcFreight, formatBRL, formatDecimal } from '../../utils/formatters';
 
 export function FabricModal({
   fabric,
@@ -13,7 +13,14 @@ export function FabricModal({
 }) {
   const [metros, setMetros] = useState<string>('1');
   const metrosNum = parseFloat(metros) || 0;
-  const meuPreco = fabric.price * 0.7 * 0.95;
+
+  const freight1m = calcFreight(fabric.price);
+  const priceWithFreight = fabric.price + freight1m;
+
+  const baseTotal = fabric.price * metrosNum;
+  const freight = calcFreight(baseTotal);
+  const totalWithFreight = baseTotal + freight;
+
   const details = [
     {
       label: 'Largura',
@@ -87,13 +94,13 @@ export function FabricModal({
             </button>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <div className="bg-emerald-500/15 border border-emerald-400/25 rounded-xl p-4 col-span-2">
+          <div className="mt-4">
+            <div className="bg-emerald-500/15 border border-emerald-400/25 rounded-xl p-4">
               <p className="text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-1">
                 Preço para o Cliente / Metro
               </p>
               <p className="text-3xl font-extrabold text-emerald-400 tracking-tight">
-                {formatBRL(fabric.price)}
+                {formatBRL(priceWithFreight)}
               </p>
               {fabric.status === 'SC' && (
                 <p className="text-amber-300/90 text-xs mt-2 flex items-center gap-1.5">
@@ -101,15 +108,6 @@ export function FabricModal({
                   Sob Consulta — preço sujeito a alteração
                 </p>
               )}
-            </div>
-            <div className="bg-white/10 border border-white/15 rounded-xl p-4 col-span-2">
-              <p className="text-white/50 text-xs font-semibold uppercase tracking-wider mb-1">
-                Meu Preço / Metro
-              </p>
-              <p className="text-2xl font-extrabold text-white tracking-tight">
-                {formatBRL(meuPreco)}
-              </p>
-              <p className="text-white/40 text-[10px] mt-1">× 0,70 × 0,95</p>
             </div>
           </div>
         </div>
@@ -134,21 +132,13 @@ export function FabricModal({
               <span className="text-gray-500 text-sm font-medium">metros</span>
             </div>
             {metrosNum > 0 && (
-              <div className="mt-3 grid grid-cols-2 gap-2">
+              <div className="mt-3">
                 <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3">
                   <p className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider mb-1">
-                    Total para o cliente
+                    Total para o cliente (com frete)
                   </p>
                   <p className="text-lg font-extrabold text-emerald-700 tracking-tight">
-                    {formatBRL(fabric.price * metrosNum)}
-                  </p>
-                </div>
-                <div className="bg-gray-100 border border-gray-200 rounded-lg p-3">
-                  <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1">
-                    Custo total
-                  </p>
-                  <p className="text-lg font-extrabold text-gray-800 tracking-tight">
-                    {formatBRL(meuPreco * metrosNum)}
+                    {formatBRL(totalWithFreight)}
                   </p>
                 </div>
               </div>
