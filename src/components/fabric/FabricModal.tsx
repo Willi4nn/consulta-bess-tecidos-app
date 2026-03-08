@@ -102,7 +102,7 @@ export function FabricModal({
                 Preço para o Cliente / Metro
               </p>
               <p className="text-3xl font-extrabold text-emerald-400 tracking-tight">
-                {formatBRL(priceWithFreight)}
+                {formatBRL(fabric.price)}
               </p>
               {fabric.status === 'SC' && (
                 <p className="text-amber-300/90 text-xs mt-2 flex items-center gap-1.5">

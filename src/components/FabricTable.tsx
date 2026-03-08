@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { Fabric } from '../data/fabrics';
 import { SortField, useFabricTable } from '../hooks/useFabricTable';
-import { calcFreight, formatBRL, formatDecimal } from '../utils/formatters';
+import { formatBRL, formatDecimal } from '../utils/formatters';
 import { FabricModal } from './fabric/FabricModal';
 import { EmptyState } from './ui/EmptyState';
 import { FilterChips } from './ui/FilterChips';
@@ -106,7 +106,7 @@ export function FabricTable({ data }: { data: Fabric[] }) {
                     </td>
                     <td className="px-5 py-3.5 whitespace-nowrap">
                       <span className="text-sm font-bold text-emerald-600">
-                        {formatBRL(fabric.price + calcFreight(fabric.price))}
+                        {formatBRL(fabric.price)}
                       </span>
                     </td>
                     <td className="px-5 py-3.5 whitespace-nowrap">
@@ -155,7 +155,7 @@ export function FabricTable({ data }: { data: Fabric[] }) {
                   </div>
                   <div className="shrink-0 bg-emerald-50 px-3.5 py-2 rounded-xl border border-emerald-100">
                     <span className="block text-lg font-bold text-emerald-700 tracking-tight whitespace-nowrap">
-                      {formatBRL(fabric.price + calcFreight(fabric.price))}
+                      {formatBRL(fabric.price)}
                     </span>
                   </div>
                 </div>
