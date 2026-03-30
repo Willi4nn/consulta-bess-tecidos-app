@@ -95,7 +95,7 @@ export function FabricTable({ data }: { data: Fabric[] }) {
                     className="cursor-pointer group hover:bg-emerald-50/25 transition-colors"
                   >
                     <td className="px-5 py-3.5 whitespace-nowrap">
-                      <span className="text-sm font-mono font-semibold text-gray-700 bg-gray-100 group-hover:bg-white/80 px-2 py-0.5 rounded-md transition-colors">
+                      <span className="text-xs font-mono font-bold text-zinc-600 bg-zinc-100/80 px-2.5 py-1 rounded-md">
                         {fabric.code}
                       </span>
                     </td>

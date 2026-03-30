@@ -27,10 +27,10 @@ export default function App() {
   if (error) return <ErrorScreen message={error} />;
 
   return (
-    <div className="min-h-screen bg-gray-50/70 font-sans text-gray-900">
-      <div className="h-1 w-full bg-linear-to-r from-emerald-400 via-emerald-500 to-teal-500" />
+    <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 selection:bg-emerald-200 antialiased relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-100 bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         <Header />
 
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

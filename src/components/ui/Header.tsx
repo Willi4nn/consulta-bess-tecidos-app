@@ -1,29 +1,26 @@
+import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function Header() {
   return (
-    <header className="mb-4 sm:mb-8">
+    <header className="mb-8 sm:mb-12">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative bg-white border border-gray-100 rounded-2xl sm:rounded-3xl px-5 py-5 sm:px-10 sm:py-10 shadow-sm overflow-hidden text-center sm:text-left"
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
       >
-        <div className="absolute -top-10 -right-10 w-48 h-48 bg-linear-to-br from-emerald-100 to-teal-50 rounded-full opacity-60 pointer-events-none" />
-        <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-linear-to-br from-gray-100 to-gray-50 rounded-full opacity-80 pointer-events-none" />
-        <div className="relative flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
-          <div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-1 sm:mb-3">
-              Catálogo Bess Tecidos
-            </h1>
-            <p className="hidden sm:block text-base sm:text-lg text-gray-500 max-w-xl">
-              Busque por código ou nome. Clique em um tecido para ver mais
-              detalhes e calcular valores.
-            </p>
-          </div>
-          <div className="hidden sm:flex items-center justify-center w-16 h-16 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-200 shrink-0">
-            <span className="text-3xl">🔍</span>
-          </div>
+        <div>
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tighter text-zinc-900 mb-2">
+            Catálogo Bess.
+          </h1>
+          <p className="text-base sm:text-lg text-zinc-500 font-medium max-w-xl">
+            Gerencie o estoque de tecidos com precisão. Busque, consulte valores
+            e calcule metragens em tempo real.
+          </p>
+        </div>
+        <div className="hidden sm:flex items-center justify-center w-14 h-14 rounded-2xl bg-zinc-900 text-white shadow-xl shadow-zinc-900/20 shrink-0 hover:scale-105 transition-transform cursor-default">
+          <Search className="h-6 w-6" />
         </div>
       </motion.div>
     </header>
